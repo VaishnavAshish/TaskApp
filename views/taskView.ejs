@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Task App</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="/javascripts/taskListHelper.js"></script>
+</head>
+<body>
+
+	<div class="container">
+      <div class="row">
+          <div class="col-sm-9" >
+            <h2>Task List</h2> 
+          </div>
+          <div class="col-sm-3" >
+            <div class="btn-group">
+              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%= userEmail %>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="/logout">Logout</a>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changePassModal">Change Password</a>
+              </div>
+            </div>
+          </div>
+      </div>
+		<form action="createTaskList" method="POST">
+			<div class="form-group">
+				<label for="usr">Name:</label>
+				<input type="text" class="form-control" name="name" id="usr" required>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</div>
+		</form>
+
+		<div id="accordion">
+			<% taskList.forEach(function(taskListRecord){ %>
+			<div class="card">
+				<div class="card-header" id="heading<%=taskListRecord.id%>">
+					<div class="row">
+						<div class="col-sm-9" >
+							<h5 class="mb-0">
+								<button class="btn btn-link" id="taskListName<%= taskListRecord.id %>" data-toggle="collapse" data-target="#collapse<%=taskListRecord.id%>" aria-expanded="true" aria-controls="collapse<%=taskListRecord.id%>">
+									<%= taskListRecord.name %>
+								</button>
+							</h5>
+						</div>
+						<div class="col-sm-3" >
+							<div class="dropdown">
+								<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Task List Action
+								</button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item" href="#" data-toggle="modal" data-target="#editTaskListModal" onclick="editTaskList('<%= taskListRecord.id %>')">Edit List</a>
+									<a class="dropdown-item" href="#" onclick="deleteList('<%= taskListRecord.id %>')">Delete List</a>
+									<a class="dropdown-item" href="#" data-toggle="modal" data-target="#createNewTaskModal" onclick="addListId('<%= taskListRecord.id %>');">Add New Task</a>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div id="collapse<%=taskListRecord.id%>" class="collapse hide" aria-labelledby="heading<%=taskListRecord.id%>" data-parent="#accordion">
+					<div class="card-body">
+              <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>TaskName</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      <th>Description</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% taskListRecord.Tasks.forEach(function(taskRecord){ %>
+                    <tr>
+                      <td><%= taskRecord.name %></td>
+                      <td><%= taskRecord.TaskStartDate %></td>
+                      <td><%= taskRecord.TaskEndDate %></td>
+                      <td><%= taskRecord.Description %></td>
+                      <td>
+                          <div class="dropdown">
+                              <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Task Action
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#createNewTaskModal" onclick="editTask('<%= taskRecord.id %>', '<%= taskRecord.name %>', '<%= taskRecord.TaskStartDate %>', '<%= taskRecord.TaskEndDate %>', '<%= taskRecord.Description %>');">Edit Task</a>
+                                <a class="dropdown-item" href="#" onclick="deleteTask('<%= taskRecord.id %>');">Delete Task</a>
+                              </div>
+                            </div>
+                      </td>
+                    </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+					</div>
+				</div>
+			</div>
+			<% }  ) %>
+
+		</div>
+    
+  
+  <!-- Modal create new Task -->
+  <div class="modal fade" id="createNewTaskModal" tabindex="-1" role="dialog" aria-labelledby="createNewTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createNewTaskModalLabel">Create New Task</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="taskActionForm" action="createNewTask" method="POST">
+          <div class="modal-body">
+                  <div class="form-group">
+                    <label for="TaskName">Task Name</label>
+                    <input type="text" class="form-control" id="TaskName" name="TaskName" aria-describedby="emailHelp" placeholder="Enter Task Name">
+                  </div>
+                  <div class="form-group">
+                    <label for="startDate">Task Start Date</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate" placeholder="Enter Task Start Date">
+                  </div>
+                  <div class="form-group">
+                      <label for="endDate">Task End Date</label>
+                      <input type="date" class="form-control" id="endDate" name="endDate" placeholder="Enter Task End Date">
+                  </div>
+                  <div class="form-group">
+                    <label for="taskDes">Task Description</label>
+                    <input type="text" class="form-control" id="taskDes" name="taskDes" aria-describedby="emailHelp" placeholder="Enter Task Description">
+                  </div>
+                  <input type="hidden" class="form-control" id="taskListId" name="taskListId">
+                  <input type="hidden" class="form-control" id="taskId" name="taskId">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="Submit" class="btn btn-primary">Save changes</button>
+          </div>
+      </form>
+      </div>
+    </div>
+  </div>
+  <!-- create new task  modal end-->
+  <!-- Edit Task List-->
+  <div class="modal fade" id="editTaskListModal" tabindex="-1" role="dialog" aria-labelledby="createNewTaskModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createNewTaskModalLabel">Create New Task</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form action="EditTaskList" method="POST">
+            <div class="modal-body">
+                    <div class="form-group">
+                      <label for="TaskName">Task List Name</label>
+                      <input type="text" class="form-control" id="TaskListName" name="TaskListName" aria-describedby="emailHelp" placeholder="Enter Task List Name">
+                    </div>
+                    <input type="hidden" class="form-control" id="taskListIdForEdit" name="taskListIdForEdit">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="Submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </form>
+        </div>
+      </div>
+    </div>
+    <!-- Edit taskList  modal end-->
+    <!-- change password modal-->
+  <div class="modal fade" id="changePassModal" tabindex="-1" role="dialog" aria-labelledby="changePassModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changePassModalLabel">Change Password</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="changePass" method="POST">
+          <div class="modal-body">
+                  <div class="form-group">
+                    <label for="TaskName">Old Password</label>
+                    <input type="password" class="form-control" id="oldPass" name="oldPass" aria-describedby="emailHelp" placeholder="Old Password">
+                  </div>
+                  <div class="form-group">
+                    <label for="TaskName">New Password</label>
+                    <input type="password" class="form-control" id="newPass" name="newPass" aria-describedby="emailHelp" placeholder="New Password">
+                  </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="Submit" class="btn btn-primary">Save changes</button>
+          </div>
+      </form>
+      </div>
+    </div>
+  </div>
+  <!-- change password  modal end-->
+		<% if(taskList.length == 0) { %>
+		<div>No Task List found</div>
+		<% } %>
+	</div>
+
+</body>
+</html>

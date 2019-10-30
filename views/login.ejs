@@ -1,0 +1,38 @@
+<% include partials/header %>        
+        <div style="text-align: center;">
+            <h1>
+            <img src="//static.hrstoppro.com//Images\115x115/cb87a9ed-0adc-415a-9dba-282dec96cd48_athena-white(30x25).png" class="logo" style="width: 2%;">    
+            <font color="red">HR</font><font color="white"> Portal</font>
+        </h1>
+        </div>
+        <div style="text-align: center;">
+                <h2><font color="#478fca">© Athenalogics solution private limited</font></h2>
+            </div>
+            <div class="login-form login-Border">
+                <span>   
+                    <h1>LOGIN</h1>
+                </span>
+                <div style="color: rebeccapurple;"><%= error %></div>
+			<form action="auth" method="POST" >
+				<input type="text" name="email" placeholder="Email" required>
+				<input type="password" name="password" placeholder="Password" required>
+                <input type="submit" value="Login">
+                <br></br>
+                
+                No User? <a href="register">Register</a>
+                <div class="toolbar clearfix">
+                        <div>
+                            <a href="/ForgotPassword" class="forgot-password-link">
+                                <i class="fa fa-arrow-left"></i> I forgot my password
+                            </a>
+                        </div>
+                    </div>
+                <div></div>
+            </form>
+            <a href="<%= url %>">Login with Google</a>
+
+            <button class="loginBtn loginBtn--google">
+                Login with Google
+              </button><br></br>
+        </div>
+<% include partials/footer %>

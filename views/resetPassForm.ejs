@@ -1,0 +1,25 @@
+<% include partials/header %>        
+        <div style="text-align: center;">
+            <h1>
+            <img src="//static.hrstoppro.com//Images\115x115/cb87a9ed-0adc-415a-9dba-282dec96cd48_athena-white(30x25).png" class="logo" style="width: 2%;">    
+            <font color="red">HR</font><font color="white"> Portal</font>
+        </h1>
+        </div>
+        <div style="text-align: center;">
+                <h2><font color="#478fca">© Athenalogics solution private limited</font></h2>
+            </div>
+            <div class="login-form login-Border">
+                <span>   
+                    <h1>LOGIN</h1>
+                </span>
+                <div style="color: rebeccapurple;"><%= message %></div>
+			<form action="updatePass" method="POST" >
+                <input type="text" name="email" placeholder="Email" required>
+                <input type="text" name="secureToken" placeholder="Provide Token" required>
+				<input type="password" name="password" placeholder="New Password" required>
+                <input type="submit" value="Update">
+                
+                <div></div>
+            </form>
+        </div>
+<% include partials/footer %>

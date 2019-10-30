@@ -1,0 +1,33 @@
+{
+  "name": "task-app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^8.1.0",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "express-ipfilter": "^1.0.1",
+    "express-mailer": "^0.3.1",
+    "express-mysql-session": "^2.1.0",
+    "express-session": "^1.16.2",
+    "fs": "0.0.1-security",
+    "googleapis": "^42.0.0",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "mysql": "^2.17.1",
+    "nodemailer": "^6.3.0",
+    "nodemon": "^1.19.2",
+    "passport": "^0.4.0",
+    "passport-google-oauth": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "sequelize": "^5.16.0",
+    "social-login": "^0.2.8",
+    "url": "^0.11.0"
+  }
+}
